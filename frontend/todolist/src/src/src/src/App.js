@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component }  from 'react';
-import Home from "./components/Homepage/Navbar";
+import Home from "./components/home";
 import Tasks from "./components/Tasks";
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
@@ -16,6 +16,5 @@ function App() {
         </div>
     );
 }
-
 
 export default App;
