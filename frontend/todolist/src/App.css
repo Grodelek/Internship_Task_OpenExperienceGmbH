@@ -1,0 +1,9 @@
+
+body{
+  background-color: #44475A;
+}
+.navbar{
+  background-color: rgba(149, 141, 141, 0.56);
+  width: auto;
+  height: 5em;
+}
