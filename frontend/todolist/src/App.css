@@ -1,9 +1,15 @@
 
 body{
-  background-color: #44475A;
+  background-color: #1E2761;
 }
 .navbar{
-  background-color: rgba(149, 141, 141, 0.56);
+  background-color: rgba(250, 244, 244, 0.89);
   width: auto;
   height: 5em;
+}
+.data-grid-wrapper{
+  margin-top: 10%;
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -21,6 +21,8 @@ const Navbar = () => {
     return (
         <navbar>
             <div className={"navbar"}>
+                <span style={{ margin: "20px"}}>To do App</span>
+                <Button style={{ margin: "20px" }} variant="outlined" href="/">Home</Button>
                 <Button style={{ margin: "20px" }} variant="outlined" href="/task">Tasks</Button>
             </div>
         </navbar>
