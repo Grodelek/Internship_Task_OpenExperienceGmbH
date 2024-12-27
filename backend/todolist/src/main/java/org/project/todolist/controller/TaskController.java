@@ -3,6 +3,7 @@ package org.project.todolist.controller;
 import org.project.todolist.entity.Task;
 import org.project.todolist.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -27,7 +28,15 @@ public class TaskController {
 
     @PostMapping("/add")
     public ResponseEntity<Task> addTask(@RequestBody Task task){
-        return ResponseEntity.ok(taskService.save(task));
+        try {
+            task.setStatus("UNDONE");
+            if (task.getStatus().isEmpty() || task.getStatus() == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            return ResponseEntity.ok(taskService.save(task));
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PutMapping("/update/{id}")

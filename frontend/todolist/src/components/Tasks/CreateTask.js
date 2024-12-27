@@ -7,6 +7,7 @@ function CreateTask() {
     const [formData, setFormData] = useState({
         name: "",
         description: "",
+        status: "",
     });
 
     const navigate = useNavigate();
@@ -32,7 +33,7 @@ function CreateTask() {
 
             if (response.ok) {
                 alert("Task added successfully!");
-                setFormData({ name: "", description: "" });
+                setFormData({ name: "", description: "", status: ""});
                 navigate("/task");
             } else {
                 alert("Failed to add task!");

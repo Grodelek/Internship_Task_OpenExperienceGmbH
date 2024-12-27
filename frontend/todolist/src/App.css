@@ -13,3 +13,8 @@ body{
   margin-left: auto;
   margin-right: auto;
 }
+.faCheckDone:hover{
+  font-size: larger;
+  cursor: pointer;
+  color: aliceblue;
+}

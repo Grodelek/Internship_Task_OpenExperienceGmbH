@@ -14,13 +14,24 @@ public class Task {
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
+    @Column(name = "status", nullable = false)
+    private String status;
 
-    public Task(String name, String description) {
+    public Task(String name, String description, String status) {
         this.name = name;
         this.description = description;
+        this.status = status;
     }
 
     public Task() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {

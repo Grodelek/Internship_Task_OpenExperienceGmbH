@@ -3,6 +3,8 @@ import axios from "axios";
 import { Button } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import Navbar from "../Homepage/Navbar";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck} from "@fortawesome/free-solid-svg-icons";
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -14,12 +16,9 @@ const Tasks = () => {
             })
             .catch(error => console.error('Error deleting task:', error));
     };
-    const markDone = (id) => {
-        axios.get(`http://localhost:8080/task`)
-            .then(() => {
-
-            })
-            .catch(error => console.error('Error deleting task:', error));
+    const markDone = async (id) => {
+            const response = await fetch(`http://localhost:8080/task/done/${id}`, {method: "POST"});
+            return response;
     }
     const columns = [
         { field: 'id', headerName: 'ID', width: 100 },
@@ -27,12 +26,17 @@ const Tasks = () => {
         { field: 'description', headerName: 'Description', width: 200 },
         {
             field: 'done', headerName: '', width: 150, renderCell: (params) => (
-                <Button
-                    variant="outlined"
-                    color="success"
-                    onClick={() => markDone(params.row.id)}>
-                    Done
-                </Button>
+                <FontAwesomeIcon className={"faCheckDone"} icon={faCheck}
+                    onClick={async () => {
+                        const response = markDone(params.row.id);
+                    if(response.ok){
+                    alert("Task Done");
+                        }
+                    if(response.error){
+                        alert("Can't mark task as done.");
+                    }}
+                }
+                />
             ),
         },
         {
