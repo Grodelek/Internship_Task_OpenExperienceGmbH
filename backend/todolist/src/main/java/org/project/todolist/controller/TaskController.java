@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/task")
-@CrossOrigin(origins = "http://localhost:3006")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TaskController {
 
     private final TaskService taskService;
@@ -26,8 +26,8 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public Task addTask(@RequestBody Task task){
-        return taskService.save(task);
+    public ResponseEntity<Task> addTask(@RequestBody Task task){
+        return ResponseEntity.ok(taskService.save(task));
     }
 
     @PutMapping("/update/{id}")
