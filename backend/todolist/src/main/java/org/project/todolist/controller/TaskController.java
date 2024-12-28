@@ -39,6 +39,48 @@ public class TaskController {
         }
     }
 
+    @PutMapping("/done/{id}")
+    public ResponseEntity<Task> doneTask(@PathVariable Long id) {
+        try {
+            Optional<Task> optionalTask = taskService.findById(id);
+            if (optionalTask.isPresent()) {
+                Task foundTask = optionalTask.get();
+                if (foundTask.getStatus().isEmpty() || foundTask.getStatus() == null) {
+                    return ResponseEntity.badRequest().build();
+                }
+                if(foundTask.getStatus().equals("DONE")){
+                    foundTask.setStatus("UNDONE");
+                    taskService.save(foundTask);
+                    return ResponseEntity.ok(foundTask);
+                }
+                foundTask.setStatus("DONE");
+                taskService.save(foundTask);
+                return ResponseEntity.ok(foundTask);
+            }else{
+                return ResponseEntity.notFound().build();
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/update/{id}")
+    public ResponseEntity<Task> updateTaskView(@PathVariable Long id, @RequestBody Task updatedTask) {
+        try {
+            Optional<Task> optionalTask = taskService.findById(id);
+            if (optionalTask.isPresent()) {
+                Task foundTask = optionalTask.get();
+                foundTask.setName(updatedTask.getName());
+                foundTask.setDescription(updatedTask.getDescription());
+                return ResponseEntity.ok(taskService.save(foundTask));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id,@RequestBody Task updatedTask){
         Optional<Task> optionalTask = taskService.findById(id);

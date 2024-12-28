@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import { Button } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
+import {Button} from "@mui/material";
+import {DataGrid} from '@mui/x-data-grid';
 import Navbar from "../Homepage/Navbar";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from 'react-router-dom';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
-
+    const [selectedId, setSelectedId] = useState([]);
+    const navigate = useNavigate();
+    const [status, setStatus] = useState(tasks.status);
     const deleteTask = (id) => {
         axios.delete(`http://localhost:8080/task/delete/${id}`)
             .then(() => {
@@ -16,27 +19,64 @@ const Tasks = () => {
             })
             .catch(error => console.error('Error deleting task:', error));
     };
+
     const markDone = async (id) => {
-            const response = await fetch(`http://localhost:8080/task/done/${id}`, {method: "POST"});
-            return response;
-    }
+        try {
+            const response = await fetch(`http://localhost:8080/task/done/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Failed to mark task as done: ${errorMessage}`);
+            }
+
+            setTasks((prevTasks) => {
+                return prevTasks.map((task) => {
+                    if (task.id === id) {
+                        return {...task, status: task.status === "DONE" ? "UNDONE" : "DONE"};
+                    }
+                    return task;
+                });
+            });
+
+        } catch (error) {
+            console.error('Error marking task as done:', error);
+            throw error;
+        }
+    };
     const columns = [
         { field: 'id', headerName: 'ID', width: 100 },
         { field: 'name', headerName: 'Task Name', width: 200 },
         { field: 'description', headerName: 'Description', width: 200 },
         {
-            field: 'done', headerName: '', width: 150, renderCell: (params) => (
-                <FontAwesomeIcon className={"faCheckDone"} icon={faCheck}
-                    onClick={async () => {
-                        const response = markDone(params.row.id);
-                    if(response.ok){
-                    alert("Task Done");
-                        }
-                    if(response.error){
-                        alert("Can't mark task as done.");
-                    }}
+            field: 'status', headerName: 'Status', width: 150, renderCell: (params) => (
+                <FontAwesomeIcon className={params.row.status === "DONE" ? "faCheckDone" : "faCross"}
+                                 icon={params.row.status === "DONE" ? faCheck : faTimes}
+                                 onClick={async () => {
+                                     await markDone(params.row.id);
+                                    if (params.row.status === "DONE") {
+                                        alert(`Task marked as Undone.`);
+                                    }else{
+                                        alert(`Task marked as Done.`);
+                                    }
+                                 }
+
                 }
                 />
+            ),
+        },
+        {
+            field: 'update', headerName: '', width: 150, renderCell: (params) => (
+                <Button
+                    variant="outlined"
+                    color="success"
+                    onClick={() => navigate(`/task/update/${params.row.id}`)}
+                    >Update
+                </Button>
             ),
         },
         {
@@ -59,7 +99,7 @@ const Tasks = () => {
 
     return (
         <div className={"centered"}>
-           <Navbar></Navbar>
+            <Navbar></Navbar>
             <div className={"data-grid-wrapper"} style={{ height: 400, width: '50%' }}>
                 <DataGrid
                     rows={tasks}
