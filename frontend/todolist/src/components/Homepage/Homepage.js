@@ -20,7 +20,8 @@ const Homepage = () => {
     }, []);
     return (
         <div className={"centered"}>
-            <Navbar></Navbar>
+            <Navbar>
+            </Navbar>
             <Box sx={{ textAlign: 'center', padding: 4 }}>
                 <Typography style={{color: "white"}} variant="h3" gutterBottom>
                     Welcome in To-Do App!

@@ -1,21 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import {Button} from "@mui/material";
-import {DataGrid} from '@mui/x-data-grid';
+import { Button, TextField } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
 import Navbar from "../Homepage/Navbar";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCheck, faTimes} from "@fortawesome/free-solid-svg-icons";
-import {useNavigate} from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
-    const [selectedId, setSelectedId] = useState([]);
+    const [filteredTasks, setFilteredTasks] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
-    const [status, setStatus] = useState(tasks.status);
+
     const deleteTask = (id) => {
         axios.delete(`http://localhost:8080/task/delete/${id}`)
             .then(() => {
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+                setFilteredTasks(prevTasks => prevTasks.filter(task => task.id !== id)); // Update filtered tasks
             })
             .catch(error => console.error('Error deleting task:', error));
     };
@@ -32,7 +34,6 @@ const Tasks = () => {
                     "Content-Type": "application/json",
                 },
             });
-
             if (!response.ok) {
                 const errorMessage = await response.text();
                 throw new Error(`Failed to mark task as done: ${errorMessage}`);
@@ -41,7 +42,16 @@ const Tasks = () => {
             setTasks((prevTasks) => {
                 return prevTasks.map((task) => {
                     if (task.id === id) {
-                        return {...task, status: task.status === "DONE" ? "UNDONE" : "DONE"};
+                        return { ...task, status: task.status === "DONE" ? "UNDONE" : "DONE" };
+                    }
+                    return task;
+                });
+            });
+
+            setFilteredTasks((prevTasks) => {
+                return prevTasks.map((task) => {
+                    if (task.id === id) {
+                        return { ...task, status: task.status === "DONE" ? "UNDONE" : "DONE" };
                     }
                     return task;
                 });
@@ -52,6 +62,7 @@ const Tasks = () => {
             throw error;
         }
     };
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 100 },
         { field: 'name', headerName: 'Task Name', width: 200 },
@@ -62,15 +73,13 @@ const Tasks = () => {
                                  icon={params.row.status === "DONE" ? faCheck : faTimes}
                                  onClick={async () => {
                                      await markDone(params.row.id);
-                                    if (params.row.status === "DONE") {
-                                        alert(`Task marked as Undone.`);
-                                    }else{
-                                        alert(`Task marked as Done.`);
-                                    }
-                                 }
-                }
-                />
-                ),
+                                     if (params.row.status === "DONE") {
+                                         alert(`Task marked as Undone.`);
+                                     } else {
+                                         alert(`Task marked as Done.`);
+                                     }
+                                 }} />
+            ),
         },
         {
             field: 'update', headerName: '', width: 150, renderCell: (params) => (
@@ -78,8 +87,7 @@ const Tasks = () => {
                     variant="outlined"
                     color="success"
                     onClick={() => updateTask(params.id)}
-                    >Update
-                </Button>
+                >Update</Button>
             ),
         },
         {
@@ -87,27 +95,44 @@ const Tasks = () => {
                 <Button
                     variant="outlined"
                     color="error"
-                    onClick={() => deleteTask(params.row.id)}>
-                    Delete
-                </Button>
+                    onClick={() => deleteTask(params.row.id)}
+                >Delete</Button>
             ),
         },
     ];
 
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        if (query === "") {
+            setFilteredTasks(tasks);  // If the query is empty, reset to all tasks
+        } else {
+            const filtered = tasks.filter(task =>
+                task.name.toLowerCase().includes(query.toLowerCase()) ||
+                task.description.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredTasks(filtered); // Set filtered tasks
+        }
+    };
+
     useEffect(() => {
         axios.get('http://localhost:8080/task')
-            .then(response => setTasks(response.data))
+            .then(response => {
+                setTasks(response.data);
+                setFilteredTasks(response.data); // Set initial tasks for filtering
+            })
             .catch(error => console.error('Error fetching data:', error));
     }, []);
 
     return (
         <div className={"centered"}>
-            <Navbar></Navbar>
+            <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
             <div className={"data-grid-wrapper"} style={{ height: 400, width: '50%' }}>
                 <DataGrid
-                    rows={tasks}
+                    rows={filteredTasks}
                     columns={columns}
-                    pageSizeOptions={[5, 10]}
+                    pageSize={5}
                     sx={{ border: '1px solid #ccc', backgroundColor: 'rgba(209, 212, 230, 0.8)' }}
                 />
             </div>

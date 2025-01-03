@@ -9,9 +9,7 @@ function CreateTask() {
         description: "",
         status: "",
     });
-
     const navigate = useNavigate();
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -19,7 +17,6 @@ function CreateTask() {
             [name]: value,
         });
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -69,8 +66,16 @@ function CreateTask() {
                     }}
                 >
                     <TextField
-                        sx={{backgroundColor: "white" , borderRadius: "10px"}}
-                        label="Name"
+                        sx={{
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            "& .MuiInputLabel-root": {
+                                color: "grey",
+                            },
+                            "& .MuiInputLabel-root.Mui-focused": {
+                                color: "black",
+                            },
+                        }}                        label="Name"
                         helperText="Please enter the Task name"
                         name="name"
                         value={formData.name}
@@ -79,8 +84,16 @@ function CreateTask() {
                         fullWidth
                     />
                     <TextField
-                        sx={{backgroundColor: "white" , borderRadius: "10px"}}
-                        label="Description"
+                        sx={{
+                            backgroundColor: "white",
+                            borderRadius: "10px",
+                            "& .MuiInputLabel-root": {
+                                color: "grey",
+                            },
+                            "& .MuiInputLabel-root.Mui-focused": {
+                                color: "black",
+                            },
+                        }}                        label="Description"
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
@@ -100,5 +113,4 @@ function CreateTask() {
         </form>
     );
 }
-
 export default CreateTask;

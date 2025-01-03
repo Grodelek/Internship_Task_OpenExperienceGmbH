@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {Button} from '@mui/material';
+import {Button, TextField} from '@mui/material';
 
-const Navbar = () => {
+const Navbar = ({searchQuery, handleSearch}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -19,13 +19,20 @@ const Navbar = () => {
     }, []);
 
     return (
-        <navbar>
+        <nav>
             <div className={"navbar"}>
                 <span style={{ margin: "20px"}}>To do App</span>
-                <Button style={{ margin: "20px" }} variant="outlined" href="/">Home</Button>
-                <Button style={{ margin: "20px" }} variant="outlined" href="/task">Tasks</Button>
+                <Button style={{ margin: "20px", width: "150px"}} variant="outlined" href="/">Home</Button>
+                <Button style={{ margin: "20px", width: "150px"}} variant="outlined" href="/task">Tasks</Button>
+                <TextField
+                    label="Search Tasks"
+                    variant="outlined"
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    sx={{ margin: "10px", width: "25%" }}
+                />
             </div>
-        </navbar>
+        </nav>
     );
 };
 
