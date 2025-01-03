@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/task")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3001")
 public class TaskController {
 
     private final TaskService taskService;
@@ -24,6 +24,17 @@ public class TaskController {
     @GetMapping
     public List<Task> getAll(){
         return taskService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTask(@PathVariable Long id){
+        Optional<Task> optionalTask = taskService.findById(id);
+        if(optionalTask.isPresent()){
+            Task task = optionalTask.get();
+            return ResponseEntity.ok(task);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/add")

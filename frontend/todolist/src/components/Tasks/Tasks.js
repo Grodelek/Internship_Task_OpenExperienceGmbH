@@ -20,6 +20,10 @@ const Tasks = () => {
             .catch(error => console.error('Error deleting task:', error));
     };
 
+    const updateTask = (id) => {
+        navigate(`/task/update/${id}`);
+    };
+
     const markDone = async (id) => {
         try {
             const response = await fetch(`http://localhost:8080/task/done/${id}`, {
@@ -64,17 +68,16 @@ const Tasks = () => {
                                         alert(`Task marked as Done.`);
                                     }
                                  }
-
                 }
                 />
-            ),
+                ),
         },
         {
             field: 'update', headerName: '', width: 150, renderCell: (params) => (
                 <Button
                     variant="outlined"
                     color="success"
-                    onClick={() => navigate(`/task/update/${params.row.id}`)}
+                    onClick={() => updateTask(params.id)}
                     >Update
                 </Button>
             ),
@@ -105,7 +108,6 @@ const Tasks = () => {
                     rows={tasks}
                     columns={columns}
                     pageSizeOptions={[5, 10]}
-                    checkboxSelection
                     sx={{ border: '1px solid #ccc', backgroundColor: 'rgba(209, 212, 230, 0.8)' }}
                 />
             </div>

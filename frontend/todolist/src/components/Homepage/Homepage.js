@@ -22,10 +22,10 @@ const Homepage = () => {
         <div className={"centered"}>
             <Navbar></Navbar>
             <Box sx={{ textAlign: 'center', padding: 4 }}>
-                <Typography variant="h3" gutterBottom>
+                <Typography style={{color: "white"}} variant="h3" gutterBottom>
                     Welcome in To-Do App!
                 </Typography>
-                <Typography style={{margin: "2vh"}} variant="h6" gutterBottom>
+                <Typography style={{margin: "2vh", color: "white"}} variant="h6" gutterBottom>
                     Manage your Daily Tasks in fast and easy way!
                 </Typography>
                 <Button variant="contained" sx={{backgroundColor: "#408EC6", marginRight: 2}} href="/task">
