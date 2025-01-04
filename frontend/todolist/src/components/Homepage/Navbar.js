@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {Button, TextField} from '@mui/material';
+import {useLocation} from "react-router";
 
 const Navbar = ({searchQuery, handleSearch}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
-
+    const location = useLocation();
     useEffect(() => {
         axios.get('http://localhost:8080/')
             .then((response) => {
@@ -13,8 +14,8 @@ const Navbar = ({searchQuery, handleSearch}) => {
             })
 
             .catch((error) => {
-                console.error('Błąd podczas pobierania danych:', error);
-                setError('Nie udało się pobrać danych z serwera.');
+                console.error('Cannot fetch data from server:', error);
+                setError('Cannot fetch data from server.');
             });
     }, []);
 
@@ -23,7 +24,11 @@ const Navbar = ({searchQuery, handleSearch}) => {
             <div className={"navbar"}>
                 <span style={{ margin: "20px"}}>To do App</span>
                 <Button style={{ margin: "20px", width: "150px"}} variant="outlined" href="/">Home</Button>
-                <Button style={{ margin: "20px", width: "150px"}} variant="outlined" href="/task">Tasks</Button>
+
+                {location.pathname ==="/task" ? (
+                        <Button style={{ margin: "20px", width: "150px"}} variant="outlined" href="/task/add">Add Task</Button>
+                    ): (<Button style={{ margin: "20px", width: "150px"}} variant="outlined" href="/task">Tasks</Button>)
+                }
                 <TextField
                     label="Search Tasks"
                     variant="outlined"

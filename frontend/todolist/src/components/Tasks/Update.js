@@ -153,8 +153,7 @@ function Update() {
                         sx={{
                             backgroundColor: "#7A2048",
                             "&:hover": { backgroundColor: "#9B3056" },
-                        }}
-                    >
+                        }}>
                         Update Task
                     </Button>
                 </Box>

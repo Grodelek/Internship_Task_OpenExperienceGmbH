@@ -17,7 +17,7 @@ const Tasks = () => {
         axios.delete(`http://localhost:8080/task/delete/${id}`)
             .then(() => {
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
-                setFilteredTasks(prevTasks => prevTasks.filter(task => task.id !== id)); // Update filtered tasks
+                setFilteredTasks(prevTasks => prevTasks.filter(task => task.id !== id));
             })
             .catch(error => console.error('Error deleting task:', error));
     };
@@ -106,13 +106,13 @@ const Tasks = () => {
         setSearchQuery(query);
 
         if (query === "") {
-            setFilteredTasks(tasks);  // If the query is empty, reset to all tasks
+            setFilteredTasks(tasks);
         } else {
             const filtered = tasks.filter(task =>
                 task.name.toLowerCase().includes(query.toLowerCase()) ||
                 task.description.toLowerCase().includes(query.toLowerCase())
             );
-            setFilteredTasks(filtered); // Set filtered tasks
+            setFilteredTasks(filtered);
         }
     };
 
@@ -120,7 +120,7 @@ const Tasks = () => {
         axios.get('http://localhost:8080/task')
             .then(response => {
                 setTasks(response.data);
-                setFilteredTasks(response.data); // Set initial tasks for filtering
+                setFilteredTasks(response.data);
             })
             .catch(error => console.error('Error fetching data:', error));
     }, []);
