@@ -6,6 +6,7 @@ import Navbar from "../Homepage/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
+import ProgressBar from "./ProgressBar";
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -38,7 +39,6 @@ const Tasks = () => {
                 const errorMessage = await response.text();
                 throw new Error(`Failed to mark task as done: ${errorMessage}`);
             }
-
             setTasks((prevTasks) => {
                 return prevTasks.map((task) => {
                     if (task.id === id) {
@@ -47,7 +47,6 @@ const Tasks = () => {
                     return task;
                 });
             });
-
             setFilteredTasks((prevTasks) => {
                 return prevTasks.map((task) => {
                     if (task.id === id) {
@@ -56,7 +55,6 @@ const Tasks = () => {
                     return task;
                 });
             });
-
         } catch (error) {
             console.error('Error marking task as done:', error);
             throw error;
@@ -104,7 +102,6 @@ const Tasks = () => {
     const handleSearch = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
-
         if (query === "") {
             setFilteredTasks(tasks);
         } else {
@@ -128,13 +125,14 @@ const Tasks = () => {
     return (
         <div className={"centered"}>
             <Navbar searchQuery={searchQuery} handleSearch={handleSearch} />
-            <div className={"data-grid-wrapper"} style={{ height: 400, width: '50%' }}>
+            <div className={"data-grid-wrapper"} style={{height: 400, width: '50%'}}>
                 <DataGrid
                     rows={filteredTasks}
                     columns={columns}
                     pageSize={5}
-                    sx={{ border: '1px solid #ccc', backgroundColor: 'rgba(209, 212, 230, 0.8)' }}
+                    sx={{border: '1px solid #ccc', backgroundColor: 'rgba(209, 212, 230, 0.8)'}}
                 />
+                <ProgressBar tasks={tasks}/>
             </div>
         </div>
     );

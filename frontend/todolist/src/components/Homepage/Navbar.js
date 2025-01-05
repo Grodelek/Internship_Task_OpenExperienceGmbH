@@ -12,7 +12,6 @@ const Navbar = ({searchQuery, handleSearch}) => {
             .then((response) => {
                 setData(response.data);
             })
-
             .catch((error) => {
                 console.error('Cannot fetch data from server:', error);
                 setError('Cannot fetch data from server.');
