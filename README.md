@@ -10,10 +10,11 @@
 - Each Task has associated fields like:
   - Task name
   - Description
-    
+  - Status 
+
 ### 🛠️ API Endpoints
 - RESTful API for seamless integration with the React frontend.
-- 
+
 ### 🗄️ Database Integration
 - Uses MySQL as the primary database.
 - The application interacts with the database efficiently using JPA (Java Persistence API) for optimized data modeling and management.
@@ -21,7 +22,7 @@
 ### 🌐 Modern Tech Stack
 - **Backend**: Powered by Spring Boot with Hibernate ORM for database interaction.
 - **Database**: MySQL
-- **Frontend**: Built using React, with a sample setup provided for seamless integration.
+- **Frontend**: Built using React and MUI components.
 ---
 
 ## Installation
