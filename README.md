@@ -2,7 +2,7 @@
 <h2>To do app</h2>
 
 ---
-
+![obraz](https://github.com/user-attachments/assets/ab744fb8-13b6-4d18-ad17-c9092c3237a0)
 ## Features
 
 ### 📋 Task management
